@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Browser", "Browser\Browser.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "traffic", "traffic\traffic.csproj", "{5E51D502-05E1-4A45-A8D6-6FB3E295D798}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.ConnectApp", "Test.ConnectApp\Test.ConnectApp.csproj", "{1F0012FA-2E59-4884-9BC7-9A065F21E0D5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.ServerApp", "Test.ConnectApp\Test.ServerApp.csproj", "{1F0012FA-2E59-4884-9BC7-9A065F21E0D5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.ClientApp", "Test.ClientApp\Test.ClientApp.csproj", "{3EA0AD16-1BB9-4DE8-9788-F3EAE47F7EF3}"
 EndProject
