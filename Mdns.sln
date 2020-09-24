@@ -1,19 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30517.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6B9AA9C7-5E90-4D10-9DDE-A2AA5FE3ECA6}"
-	ProjectSection(SolutionItems) = preProject
-		.gitignore = .gitignore
-		.travis.yml = .travis.yml
-		appveyor.yml = appveyor.yml
-		.circleci\config.yml = .circleci\config.yml
-		LICENSE = LICENSE
-		mung.cmd = mung.cmd
-		README.md = README.md
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Documentation", "doc\Documentation.csproj", "{F3A32EA9-0B2F-46A3-B47A-33B4C04BD423}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mdns", "src\Mdns.csproj", "{F3C81C57-C283-4E07-B765-DEABCFB22136}"
@@ -24,7 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spike", "Spike\Spike.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Browser", "Browser\Browser.csproj", "{A77BEF8C-440E-46F7-ACFC-5EF06EFCA4BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "traffic", "traffic\traffic.csproj", "{5E51D502-05E1-4A45-A8D6-6FB3E295D798}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "traffic", "traffic\traffic.csproj", "{5E51D502-05E1-4A45-A8D6-6FB3E295D798}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.ConnectApp", "Test.ConnectApp\Test.ConnectApp.csproj", "{1F0012FA-2E59-4884-9BC7-9A065F21E0D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.ClientApp", "Test.ClientApp\Test.ClientApp.csproj", "{3EA0AD16-1BB9-4DE8-9788-F3EAE47F7EF3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,6 +47,14 @@ Global
 		{5E51D502-05E1-4A45-A8D6-6FB3E295D798}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E51D502-05E1-4A45-A8D6-6FB3E295D798}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E51D502-05E1-4A45-A8D6-6FB3E295D798}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F0012FA-2E59-4884-9BC7-9A065F21E0D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F0012FA-2E59-4884-9BC7-9A065F21E0D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F0012FA-2E59-4884-9BC7-9A065F21E0D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F0012FA-2E59-4884-9BC7-9A065F21E0D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EA0AD16-1BB9-4DE8-9788-F3EAE47F7EF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EA0AD16-1BB9-4DE8-9788-F3EAE47F7EF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EA0AD16-1BB9-4DE8-9788-F3EAE47F7EF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EA0AD16-1BB9-4DE8-9788-F3EAE47F7EF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
