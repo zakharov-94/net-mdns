@@ -19,11 +19,13 @@ namespace Test.ClientApp
 
         static async Task Main(string[] args)
         {
-            var client = new Client();
+            Console.WriteLine("Please enter clientIp:");
+            string ip = Console.ReadLine();
+            ip = string.IsNullOrEmpty(ip) ? "192.168.88.239" : ip;
+            var client = new Client(ip);
+
             Console.ReadLine();
         }
-
-
     }
 
     public class Client
@@ -39,54 +41,18 @@ namespace Test.ClientApp
         private Thread advertiseThread;
         private string servicename = "";
         private ServiceDiscovery sd;
+        private string _clientIp = "";
 
-        public Client()
+        public Client(string clientIp)
         {
+            _clientIp = clientIp;
             mdns = new MulticastService();
-            //var domainName = "_appletv.local.appletv._local.appletv.local.appletv.local";
-            //var domainName = "RRxPT-58410e704_gnsslocation._itxpt_multicast._udp._local";
             var domainName = "_itxpt_multicast._tcp";
-            this.servicename = "gnsslocation";
+            servicename = "gnsslocation";
             mdns.NetworkInterfaceDiscovered += (s, e) => mdns.SendQuery(domainName);
-            /*mdns.QueryReceived += (s, e) =>
-            {
-                var msg = e.Message;
-                if (e.RemoteEndPoint.Port == 2020)
-                {
 
-                }
-                if (msg.Questions.Any(q => q.Name == domainName))
-                {
-                    var res = msg.CreateResponse();
-                    var addresses = MulticastService.GetIPAddresses()
-                        .Where(ip => ip.AddressFamily == AddressFamily.InterNetwork);
-                    foreach (var address in addresses)
-                    {
-                        
-                        Message message = e.Message.CreateResponse();
-                        SRVRecord item = new SRVRecord();
-                        item.Class = (DnsClass)32769;
-                        item.Priority = 0;
-                        item.Weight = 0;
-                        item.Port = 14005;
-                        item.Target = Dns.GetHostName();
-                        res.Answers.Add(item);
-
-                    }
-                    mdns.SendAnswer(res);
-                }
-            };*/
             mdns.AnswerReceived += (s, e) =>
             {
-                //if (e.RemoteEndPoint.Address.ToString() == "192.168.88.64")
-                //{
-                //    return;
-                //}
-                //if(e.Message.Na)
-                if (e.RemoteEndPoint.Port == 2020)
-                {
-
-                }
                 Console.WriteLine($"GET response from server {e.RemoteEndPoint.Address}:{e.RemoteEndPoint.Port}. Message: {e.Message.Answers.FirstOrDefault()}");
                 List<ResourceRecord> answers = e.Message.Answers;
                 this.ParseRecords(answers);
@@ -151,27 +117,26 @@ namespace Test.ClientApp
                     else
                     {
                         Console.WriteLine("FeedbackType.Client: " + string.Format("JoinMulticastGroup {0}:{1}", this.multicastIp, this.srvRec.Port));
-                        this.udpClient = new UdpClient(this.srvRec.Port);
-                        this.udpClient.JoinMulticastGroup(IPAddress.Parse(this.multicastIp), 50);
-                        this.receiveThread = new Thread(new ThreadStart(this.Receive));
-                        this.receiveThread.Start();
+                        udpClient = new UdpClient(this.srvRec.Port);
+                        udpClient.JoinMulticastGroup(IPAddress.Parse(this.multicastIp), 50);
+                        receiveThread = new Thread(new ThreadStart(this.Receive));
+                        receiveThread.Start();
                     }
                 }
             };
 
-            this.advertiseThread = new Thread(new ThreadStart(() =>
+            advertiseThread = new Thread(new ThreadStart(() =>
             {
                 sd = new ServiceDiscovery(mdns);
-                var sp = new CustomServiceProfile("gnsslocation", domainName, 14005);
-                var sp1 = new CustomServiceProfile("gnsslocation1", domainName, 14005);
+                var sp = new ServiceProfile(servicename, domainName, 14005);
                 sp.AddProperty("host", "192.168.88.239");
                 sp.AddProperty("port", "14005");
-                //sp.Resources.Add(new ARecord { Name = "_gnssslocation._itxpt_multicast._tcp", Address = IPAddress.Parse("192.168.88.239"), Class = DnsClass.IN });
-                //sp.Resources.Add(new SRVRecord { Name = "_itxpt_multicast._tcp", Port = 14005, Priority = 0, Weight = 0, Class = DnsClass.IN });
+                sp.Resources.Add(new ARecord { Name = "_itxpt_multicast._tcp", Address = IPAddress.Parse("192.168.88.239"), Class = DnsClass.IN });
+                sp.Resources.Add(new SRVRecord { Name = "_itxpt_multicast._tcp", Port = 14005, Priority = 0, Weight = 0, Class = DnsClass.IN });
                 sd.Advertise(sp);
-                sd.Advertise(sp1);
             }));
-            this.advertiseThread.Start();
+
+            advertiseThread.Start();
 
             mdns.Start();
         }
@@ -227,7 +192,7 @@ namespace Test.ClientApp
                 byte[] bytes = this.udpClient.Receive(ref remoteEP);
                 string xml = Encoding.Default.GetString(bytes);
                 Console.WriteLine("FeedbackType.GNSS: " + xml);
-                SendMessage(xml, "192.168.88.239", this.srvRec.Port);
+                SendMessage(xml, _clientIp, this.srvRec.Port); // "192.168.88.43"
             }
         }
 
@@ -244,33 +209,6 @@ namespace Test.ClientApp
             get
             {
                 return this.servicename;
-            }
-        }
-    }
-
-    public class CustomServiceProfile : ServiceProfile
-    {
-        public CustomServiceProfile(DomainName instanceName, DomainName serviceName, ushort port, IEnumerable<IPAddress> addresses = null) : base()
-        {
-            InstanceName = instanceName;
-            ServiceName = serviceName;
-            var fqn = instanceName;
-
-            var simpleServiceName = new DomainName(ServiceName.ToString()
-                .Replace("._tcp", "")
-                .Replace("._udp", "")
-                .Trim('_')
-                .Replace("_", "-"));
-            HostName = serviceName;
-            Resources.Add(new SRVRecord
-            {
-                Name = fqn,
-                Port = port,
-                Class = DnsClass.IN
-            });
-            foreach (var address in addresses ?? MulticastService.GetLinkLocalAddresses())
-            {
-                Resources.Add(AddressRecord.Create(HostName, address));
             }
         }
     }
